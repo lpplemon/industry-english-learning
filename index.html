@@ -26,8 +26,9 @@
             <div><span>行业</span><strong id="industryLine">未设置</strong></div>
             <div><span>产品</span><strong id="productLine">未设置</strong></div>
             <div><span>AI词库</span><strong id="bankLine">0 条</strong></div>
+            <div><span>API</span><strong id="apiLine">未连接</strong></div>
           </div>
-          <button class="primary-btn full-btn" id="generateBtn" type="button">AI生成 / 续写5000条</button>
+          <button class="primary-btn full-btn" id="generateBtn" type="button">AI生成 / 续写内容</button>
         </section>
 
         <section class="panel compact">
@@ -162,6 +163,35 @@
           </label>
           <button class="primary-btn" type="submit">生成我的AI专业词库</button>
         </form>
+        <div class="api-box">
+          <div class="panel-title">
+            <h3>API 绑定</h3>
+            <span class="api-status" id="apiStatusText">未启用</span>
+          </div>
+          <label class="toggle-row">
+            <input id="useCustomApi" type="checkbox" />
+            <span>使用我自己的 API</span>
+          </label>
+          <label>
+            供应商
+            <select id="apiProvider">
+              <option value="openai">OpenAI</option>
+              <option value="deepseek">DeepSeek</option>
+            </select>
+          </label>
+          <label>
+            API Key
+            <input id="apiKeyInput" type="password" placeholder="sk-..." />
+          </label>
+          <label>
+            模型
+            <input id="apiModelInput" placeholder="gpt-4.1-mini" />
+          </label>
+          <div class="api-actions">
+            <button class="secondary-btn" id="testApiBtn" type="button">测试连接</button>
+            <p class="hint">开启后，系统会优先使用你自己的额度。</p>
+          </div>
+        </div>
       </div>
     </div>
 
