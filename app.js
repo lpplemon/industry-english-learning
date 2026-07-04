@@ -1,3 +1,9 @@
+(function loadRuntimeScript() {
+  const script = document.createElement("script");
+  script.src = "app-runtime.js";
+  script.defer = true;
+  document.head.appendChild(script);
+})();
 ﻿const GROUP_SIZE = 10;
 const BUFFER_SIZE = 40;
 
