@@ -196,6 +196,207 @@
     </div>
 
     <div class="toast" id="toast"></div>
+    <script src="app-runtime.js"></script>
+  </body>
+</html>
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI 行业英语学习舱</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <aside class="sidebar" aria-label="学习设置">
+        <div class="brand-block">
+          <div class="brand-mark">AI</div>
+          <div>
+            <h1>AI 行业英语学习舱</h1>
+            <p id="profileLine">输入你的行业和产品，生成专属专业英语库</p>
+          </div>
+        </div>
+
+        <section class="panel">
+          <div class="panel-title">
+            <h2>行业与产品</h2>
+            <button class="text-btn" id="openSetupBtn" type="button">重新设置</button>
+          </div>
+          <div class="brief-list">
+            <div><span>行业</span><strong id="industryLine">未设置</strong></div>
+            <div><span>产品</span><strong id="productLine">未设置</strong></div>
+            <div><span>AI词库</span><strong id="bankLine">0 条</strong></div>
+            <div><span>API</span><strong id="apiLine">未连接</strong></div>
+          </div>
+          <button class="primary-btn full-btn" id="generateBtn" type="button">AI生成 / 续写内容</button>
+        </section>
+
+        <section class="panel compact">
+          <h2>当前学习组</h2>
+          <div class="goal-lines">
+            <div>
+              <span>本组进度</span>
+              <strong id="groupLine">0 / 10</strong>
+            </div>
+            <div>
+              <span>总掌握量</span>
+              <strong id="masteredLine">0</strong>
+            </div>
+            <div>
+              <span>待复习</span>
+              <strong id="reviewLine">0</strong>
+            </div>
+          </div>
+          <div class="progress-ring" aria-label="当前组进度">
+            <svg viewBox="0 0 120 120" role="img">
+              <circle cx="60" cy="60" r="50"></circle>
+              <circle id="progressCircle" cx="60" cy="60" r="50"></circle>
+            </svg>
+            <span id="progressText">0%</span>
+          </div>
+          <p class="hint" id="progressHint">学完这一组后，系统会自动给你推送下一组。</p>
+        </section>
+
+        <section class="panel compact">
+          <h2>导入自己的表格</h2>
+          <p class="hint">支持 CSV / TSV。推荐列名：word, chinese, phrase, scenario, dialogue。</p>
+          <label class="file-pick">
+            <input id="importFile" type="file" accept=".csv,.tsv,.txt" />
+            导入学习表格
+          </label>
+        </section>
+      </aside>
+
+      <section class="workspace">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">AI Generated English Loop</p>
+            <h2 id="planTitle">先设置你的行业和产品</h2>
+          </div>
+          <div class="search-wrap">
+            <input id="searchInput" type="search" placeholder="搜索单词、中文、场景、对话" />
+          </div>
+        </header>
+
+        <nav class="tabs" aria-label="学习内容分类">
+          <button class="tab active" data-tab="learn">学习组</button>
+          <button class="tab" data-tab="review">复习库</button>
+          <button class="tab" data-tab="games">互动练习</button>
+          <button class="tab" data-tab="bank">词库总览</button>
+          <button class="tab" data-tab="stats">数据复盘</button>
+        </nav>
+
+        <section class="content-grid">
+          <div class="study-column">
+            <div class="section-heading">
+              <div>
+                <h3 id="sectionTitle">今日学习组</h3>
+                <p id="sectionSubtitle">每组 10 条，包含专业单词、语句、场景和对话。</p>
+              </div>
+              <div class="section-actions">
+                <div class="accent-toggle" aria-label="发音偏好">
+                  <button class="accent-btn active" data-accent="en-US" type="button">美式</button>
+                  <button class="accent-btn" data-accent="en-GB" type="button">英式</button>
+                </div>
+                <button class="ghost-btn" id="nextGroupBtn" type="button">换下一组</button>
+              </div>
+            </div>
+            <div class="cards" id="cards"></div>
+          </div>
+
+          <aside class="practice-panel">
+            <h3>强互动练习</h3>
+            <div class="game-mode">
+              <button class="mode-btn active" data-game="match" type="button">释义快选</button>
+              <button class="mode-btn" data-game="fill" type="button">语句填空</button>
+              <button class="mode-btn" data-game="dialogue" type="button">对话补全</button>
+            </div>
+            <p id="gamePrompt">从当前学习组抽题，答错会自动进入复习库。</p>
+            <div class="game-options" id="gameOptions"></div>
+            <button class="primary-btn full-btn" id="startGameBtn" type="button">开始互动练习</button>
+
+            <div class="divider"></div>
+            <h3>手动添加</h3>
+            <form id="customForm">
+              <label>
+                专业单词 / 短语
+                <input id="customWord" placeholder="例如：predictive maintenance" />
+              </label>
+              <label>
+                中文释义
+                <input id="customChinese" placeholder="例如：预测性维护" />
+              </label>
+              <label>
+                场景语句
+                <textarea id="customPhrase" rows="3" placeholder="例如：We use predictive maintenance to reduce downtime."></textarea>
+              </label>
+              <button class="secondary-btn" type="submit">加入持续练习库</button>
+            </form>
+
+            <div class="review-box">
+              <h3>学习节奏</h3>
+              <p id="loopHint">掌握一组以后会自动推送新组；5000 条学完后，AI会继续生成下一批。</p>
+            </div>
+          </aside>
+        </section>
+      </section>
+    </main>
+
+    <div class="modal hidden" id="setupModal" role="dialog" aria-modal="true">
+      <div class="modal-card">
+        <button class="close-btn" id="closeSetupBtn" type="button" aria-label="关闭">×</button>
+        <p class="eyebrow">AI Setup</p>
+        <h2>填写你的行业和产品</h2>
+        <p class="modal-copy">系统会围绕你的真实业务生成 5000 条专业单词、语句和情景对话；学完一组自动换新，学完一批自动续写。</p>
+        <form id="profileForm">
+          <label>
+            学习昵称
+            <input id="nameInput" maxlength="12" placeholder="例如：Lina" />
+          </label>
+          <label>
+            你的行业
+            <input id="industryInput" placeholder="例如：新能源汽车出口、口腔医疗、工业机器人集成" />
+          </label>
+          <label>
+            你的产品 / 服务
+            <input id="productInput" placeholder="例如：充电桩、隐形矫治器、六轴机械臂" />
+          </label>
+          <button class="primary-btn" type="submit">生成我的AI专业词库</button>
+        </form>
+        <div class="api-box">
+          <div class="panel-title">
+            <h3>API 绑定</h3>
+            <span class="api-status" id="apiStatusText">未启用</span>
+          </div>
+          <label class="toggle-row">
+            <input id="useCustomApi" type="checkbox" />
+            <span>使用我自己的 API</span>
+          </label>
+          <label>
+            供应商
+            <select id="apiProvider">
+              <option value="openai">OpenAI</option>
+              <option value="deepseek">DeepSeek</option>
+            </select>
+          </label>
+          <label>
+            API Key
+            <input id="apiKeyInput" type="password" placeholder="sk-..." />
+          </label>
+          <label>
+            模型
+            <input id="apiModelInput" placeholder="gpt-4.1-mini" />
+          </label>
+          <div class="api-actions">
+            <button class="secondary-btn" id="testApiBtn" type="button">测试连接</button>
+            <p class="hint">开启后，系统会优先使用你自己的额度。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
     <script src="app.js"></script>
   </body>
 </html>
