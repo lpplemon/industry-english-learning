@@ -85,6 +85,7 @@ module.exports = async function handler(req, res) {
   const body = typeof req.body === 'string' ? JSON.parse(req.body || '{}') : (req.body || {});
   const count = Math.min(Math.max(Number(body.count) || 10, 1), 20);
   const profile = body.profile || {};
+  const connectionTest = Boolean(body.connectionTest);
   const provider = cleanText(body.provider, 'openai').toLowerCase();
   const apiKey = cleanText(body.apiKey, '');
   const model = cleanText(body.model, DEFAULT_MODELS[provider] || DEFAULT_MODELS.openai);
@@ -98,23 +99,32 @@ module.exports = async function handler(req, res) {
   if (!apiKey) {
     return sendJson(res, 400, { error: 'API key is required.' });
   }
-  if (!industry || !product) {
+  if (!connectionTest && (!industry || !product)) {
     return sendJson(res, 400, { error: 'Industry and product are required.' });
   }
 
-  const prompt = [
-    'You are helping build a professional English learning app.',
-    'Generate concise but realistic business learning content for the user's industry and product.',
-    'Avoid generic filler, avoid repeating the same words, and avoid unrealistic equipment unless the industry truly requires it.',
-    'Return JSON only with this shape: {"items": [...]}',
-    `Need ${count} items.`,
-    `Industry: ${industry}`,
-    `Product: ${product}`,
-    'Each item must include: word, chinese, phrase, phraseCn, scenario, dialogue, dialogueCn.',
-    'The dialogue should feel like a real customer-service, sales, technical-support, or operations conversation in that industry.',
-    'The Chinese content should be natural, sentence-level, and not fragmentary.',
-    'Use short, practical examples that a learner can actually repeat aloud.'
-  ].join('\n');
+  const prompt = connectionTest
+    ? [
+        'You are helping build a professional English learning app.',
+        'This request is only used to verify that the API key and model are working.',
+        'Return JSON only with this shape: {"items": [...]}',
+        'Return exactly 1 item.',
+        'Use a generic business example.',
+        'Each item must include: word, chinese, phrase, phraseCn, scenario, dialogue, dialogueCn.'
+      ].join('\n')
+    : [
+        'You are helping build a professional English learning app.',
+        'Generate concise but realistic business learning content for the user\'s industry and product.',
+        'Avoid generic filler, avoid repeating the same words, and avoid unrealistic equipment unless the industry truly requires it.',
+        'Return JSON only with this shape: {"items": [...]}',
+        `Need ${count} items.`,
+        `Industry: ${industry}`,
+        `Product: ${product}`,
+        'Each item must include: word, chinese, phrase, phraseCn, scenario, dialogue, dialogueCn.',
+        'The dialogue should feel like a real customer-service, sales, technical-support, or operations conversation in that industry.',
+        'The Chinese content should be natural, sentence-level, and not fragmentary.',
+        'Use short, practical examples that a learner can actually repeat aloud.'
+      ].join('\n');
 
   let response;
   try {
