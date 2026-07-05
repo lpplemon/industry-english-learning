@@ -745,8 +745,12 @@ async function testApiConnection() {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
+      connectionTest: true,
       count: 1,
-      profile: currentProfile(),
+      profile: state.profile || {
+        industry: "general business",
+        product: "professional service"
+      },
       provider: config.provider,
       apiKey: config.apiKey,
       model: config.model,
