@@ -1,0 +1,6 @@
+{
+  "name": "Pro English",
+  "description": "An immersive business English learning platform featuring AI copilot suggestions, interactive pronunciation coaches, AI customer negotiation practice, and a smart knowledge base hub.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
